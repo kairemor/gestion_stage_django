@@ -20,7 +20,10 @@ from .models import (
     Attachments,
     ConventionMessage,
     RapportComment,
-    Notification
+    Notification,
+    StudentWhiteList,
+    TeacherWhiteList,
+    FramerWhiteList
 )
 
 
@@ -183,6 +186,11 @@ class PromotionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Promotion
         fields = ('id', 'name', 'students')
+class PromotionRegisterSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Promotion
+        fields = ('id', 'name')
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -243,4 +251,24 @@ class ConventionMessageSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ConventionMessage
+        fields = '__all__'
+
+class StudentWhiteListSerializer(serializers.ModelSerializer):
+    
+
+    class Meta:
+        model = StudentWhiteList
+        fields = '__all__'
+
+class TeacherWhiteListSerializer(serializers.ModelSerializer):
+    
+
+    class Meta:
+        model = TeacherWhiteList
+        fields = '__all__'
+class FramerWhiteListSerializer(serializers.ModelSerializer):
+    
+
+    class Meta:
+        model = FramerWhiteList
         fields = '__all__'

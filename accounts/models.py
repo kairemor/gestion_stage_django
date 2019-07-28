@@ -143,6 +143,8 @@ class Task(models.Model):
     create_at = models.DateTimeField(auto_now_add=True, null=True)
     state = models.CharField(
         max_length=30, choices=TASK_STATE, default="To Do")
+    
+    is_deleted = models.BooleanField(default=False)
 
     def __str__(self):
         return self.title + ":  " + self.description
@@ -212,3 +214,25 @@ class Notification(models.Model):
 # class Immersion(models.Model):
 #     enterprise = models.ForeignKey(Enterprise, related_name='immersion', on_delete=CASCADE)
 #     classroom = models.ForeignKey(Classroom, on_delete=models.CASCADE)
+
+
+class StudentWhiteList(models.Model):
+    email = models.CharField(max_length=100, null=False, unique=True)
+    phone = models.IntegerField(unique=True)
+
+    def __str__(self):
+        return self.email + ":" + str(self.phone)
+    
+class TeacherWhiteList(models.Model):
+    email = models.CharField(max_length=100, null=False, unique=True)
+    phone = models.IntegerField(unique=True)
+
+    def __str__(self):
+        return self.email + ":" + str(self.phone)
+class FramerWhiteList(models.Model):
+    email = models.CharField(max_length=100, null=False, unique=True)
+    phone = models.IntegerField(unique=True)
+
+    def __str__(self):
+        return self.email + ":" + str(self.phone)
+    

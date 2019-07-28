@@ -76,9 +76,9 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'USER': 'postgres',
         'PASSWORD': 'postgre',
-        # 'HOST': 'postgres://vicqaaxgfrzylr:a4ef463254f5827425745e52464bf50af6858c9c3fc898e30489f811af7bbf74@ec2-23-21-160-38.compute-1.amazonaws.com:5432/de35bkdpfss779',
-        'HOST': '127.0.0.1',
-        'PORT': '5432',
+        'HOST': 'postgres://vicqaaxgfrzylr:a4ef463254f5827425745e52464bf50af6858c9c3fc898e30489f811af7bbf74@ec2-23-21-160-38.compute-1.amazonaws.com:5432/de35bkdpfss779',
+        # 'HOST': '127.0.0.1',
+        'PORT': '',
         'NAME': 'gestage',
     }
 }

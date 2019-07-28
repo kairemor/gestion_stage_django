@@ -46,6 +46,9 @@ class EnterpriseViewSet(viewsets.ModelViewSet):
         if 'is_partner' in request.data:
             enterprise.is_partner = request.data['is_partner']
 
+        if 'is_deleted' in request.data:
+            enterprise.is_deleted = request.data['is_deleted']
+
         enterprise.save()
 
         return Response(EnterpriseSerializers(enterprise).data)
@@ -55,22 +58,22 @@ class EnterpriseGET(generics.ListAPIView):
     permission_classes = [
         permissions.AllowAny
     ]
-    queryset = Enterprise.objects.all().order_by('-id')
+    queryset = Enterprise.objects.filter(is_deleted=False).order_by('-id')
     serializer_class = EnterpriseSerializers
 
 
 class EnterprisePartnerView(generics.ListAPIView):
-    queryset = Enterprise.objects.filter(is_partner=True).order_by('-id')
+    queryset = Enterprise.objects.filter(is_partner=True, is_deleted=False).order_by('-id')
     serializer_class = EnterpriseSerializers
 
 
 class EnterprisePotentialView(generics.ListAPIView):
-    queryset = Enterprise.objects.filter(is_partner=False).order_by('-id')
+    queryset = Enterprise.objects.filter(is_partner=False, is_deleted=False).order_by('-id')
     serializer_class = EnterpriseSerializers
 
 
 class ConventionViewSet(viewsets.ModelViewSet):
-    queryset = Convention.objects.all().order_by('-id')
+    queryset = Convention.objects.filter(is_deleted=False).order_by('-id')
     serializer_class = ConventionSerializer
 
 
@@ -91,6 +94,10 @@ class ConventionViewSet(viewsets.ModelViewSet):
 
         if 'life_time' in request.data:
             convention.life_time = request.data['life_time']
+        
+
+        if 'is_deleted' in request.data:
+            convention.is_deleted = request.data['is_deleted']
     
         convention.save()
 

@@ -22,7 +22,10 @@ from .models import (
     Attachments,
     ConventionMessage,
     RapportComment,
-    Notification
+    Notification,
+    StudentWhiteList,
+    TeacherWhiteList,
+    FramerWhiteList
 )
 from .serializers import (
     FramerSerializer,
@@ -40,7 +43,11 @@ from .serializers import (
     AttachmentsSerializer,
     ConventionMessageSerializer,
     RapportCommentSerializer,
-    NotificationSerializer
+    NotificationSerializer,
+    StudentWhiteListSerializer,
+    TeacherWhiteListSerializer,
+    FramerWhiteListSerializer,
+    PromotionRegisterSerializer
 )
 
 
@@ -72,7 +79,6 @@ class RegisterAPI(generics.GenericAPIView):
     ]
 
     def post(self, request, *args, **kwargs):
-        print(request.data)
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
@@ -80,6 +86,7 @@ class RegisterAPI(generics.GenericAPIView):
         last_name = request.data['lastname']
         phone = request.data["phone"]
         email = request.data["email"]
+
         try:
             User.objects.get(email=email)
             return Response({
@@ -93,6 +100,13 @@ class RegisterAPI(generics.GenericAPIView):
         except:
             pass
         if request.data['status'] == 'student':
+            try :
+                StudentWhiteList.objects.get(email=email, phone=phone)
+                pass
+            except:
+                return Response({
+                    'error' : "Vous n'avez le droit d'acces a la platforme avec cet email"
+                })
             department_name = request.data['department']
             birthday = request.data['birthday']
             department = Department.objects.get(name=department_name)
@@ -104,6 +118,13 @@ class RegisterAPI(generics.GenericAPIView):
                                    last_name=last_name, department=department, classroom=classroom, phone=phone, image=image, birthday=birthday)
 
         elif request.data['status'] == 'teacher':
+            try :
+                TeacherWhiteList.objects.get(email=email, phone=phone)
+                pass
+            except:
+                return Response({
+                    'error' : "Vous n'avez le droit d'acces au platforme"
+                })
             department_name = request.data['department']
             department = Department.objects.get(name=department_name)
             user = serializer.save()
@@ -111,13 +132,19 @@ class RegisterAPI(generics.GenericAPIView):
                                    last_name=last_name, department=department, phone=phone, image=image)
 
         elif request.data['status'] == 'framer':
+            try :
+                FramerWhiteList.objects.get(email=email, phone=phone)
+                pass
+            except:
+                return Response({
+                    'error' : "Vous n'avez le droit d'acces au platforme"
+                })
             user = serializer.save()
             enterprise = Enterprise.objects.get(id=request.data['enterprise'])
             Framer.objects.create(user=user, first_name=first_name,
                                   last_name=last_name, phone=phone, image=image, enterprise=enterprise)
 
         user.save()
-        print("Authtoken values : ", AuthToken.objects.create(user))
         return Response({
             "user": UserSerializer(user, context=self.get_serializer_context()).data,
             "token": AuthToken.objects.create(user)[1]
@@ -178,7 +205,7 @@ class StudentAPI(viewsets.ModelViewSet):
     def get_queryset(self):
         queryset_search = Student.objects.all()
         query = self.request.GET.get('search')
-        print(query)
+        
         if query:
             queryset_search = queryset_search.filter(
                 Q(first_name__icontains=query)
@@ -243,6 +270,12 @@ class PromotionAPI(generics.ListCreateAPIView):
     ]
     queryset = Promotion.objects.all().order_by('-id')
     serializer_class = PromotionSerializer
+class PromotionRegisterAPI(generics.ListCreateAPIView):
+    permission_classes = [
+        permissions.AllowAny
+    ]
+    queryset = Promotion.objects.all().order_by('-id')
+    serializer_class = PromotionRegisterSerializer
 
 
 class ClassroomAPI(viewsets.ModelViewSet):
@@ -259,7 +292,7 @@ class SkillViewSet(viewsets.ModelViewSet):
 
 
 class TaskViewSet(viewsets.ModelViewSet):
-    queryset = Task.objects.all()
+    queryset = Task.objects.all().order_by('-id')
     serializer_class = TaskSerializer
 
     def create(self, request):
@@ -492,3 +525,14 @@ class NotificationViewSet(viewsets.ModelViewSet):
         notification.save()
 
         return Response(NotificationSerializer(notification).data)
+
+
+class StudentWhiteListViewSet(viewsets.ModelViewSet):
+    queryset = StudentWhiteList.objects.all().order_by('-id')
+    serializer_class = StudentWhiteListSerializer
+class TeacherWhiteListViewSet(viewsets.ModelViewSet):
+    queryset = TeacherWhiteList.objects.all().order_by('-id')
+    serializer_class = TeacherWhiteListSerializer
+class FramerWhiteListViewSet(viewsets.ModelViewSet):
+    queryset = FramerWhiteList.objects.all().order_by('-id')
+    serializer_class = FramerWhiteListSerializer

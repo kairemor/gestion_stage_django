@@ -21,7 +21,11 @@ from .api import (
     AttachmentsViewSet,
     ConventionMessageViewSet,
     RapportCommentViewSet,
-    NotificationViewSet
+    NotificationViewSet,
+    StudentWhiteListViewSet,
+    FramerWhiteListViewSet,
+    TeacherWhiteListViewSet,
+    PromotionRegisterAPI
 )
 
 router = routers.DefaultRouter()
@@ -38,6 +42,10 @@ router.register('task-comments', TaskCommentViewSet, 'taskComments')
 router.register('rapport-comments', RapportCommentViewSet, 'rapportComments')
 router.register('notifications', NotificationViewSet, 'notification')
 
+router.register('whitestudents', StudentWhiteListViewSet, 'whitestudent')
+router.register('whiteteacher', TeacherWhiteListViewSet, 'whiteteacher')
+router.register('whiteframer', FramerWhiteListViewSet, 'whiteframer')
+
 urlpatterns = [
     path('auth', include('knox.urls')),
     path('auth/register', RegisterAPI.as_view()),
@@ -46,5 +54,6 @@ urlpatterns = [
     path('auth/user', UserAPI.as_view()),
     path('auth/logout', knox_views.LogoutView.as_view(), name="knox_logout"),
     path('promos', PromotionAPI.as_view()),
+    path('promosregister', PromotionRegisterAPI.as_view()),
     path('department', DepartmentAPI.as_view()),
 ] + router.urls

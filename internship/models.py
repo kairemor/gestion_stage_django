@@ -18,6 +18,7 @@ class Enterprise(models.Model):
     phone = models.IntegerField()
     leader_name = models.CharField(max_length=50, default="")
     is_partner = models.BooleanField(default=False)
+    is_deleted = models.BooleanField(default=False)
     add_date = models.DateTimeField(auto_now_add=True)
     latitude = models.FloatField(null=True)
     longitude = models.FloatField(null=True)
@@ -33,6 +34,7 @@ class Convention(models.Model):
     life_time = models.IntegerField(default=0)
     state = models.CharField(max_length=50, choices=CONVENTION_STATE)
     starting_date = models.DateTimeField(auto_now_add=True)
+    is_deleted = models.BooleanField(default=False)
 
     def __str__(self):
         return self.title
