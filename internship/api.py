@@ -47,7 +47,7 @@ class EnterpriseViewSet(viewsets.ModelViewSet):
             enterprise.is_partner = request.data['is_partner']
 
         if 'is_deleted' in request.data:
-            enterprise.is_deleted = request.data['is_deleted']
+            enterprise.is_deleted = True
 
         if 'name' in request.data:
             enterprise.name = request.data['name']
@@ -118,7 +118,7 @@ class ConventionViewSet(viewsets.ModelViewSet):
         
 
         if 'is_deleted' in request.data:
-            convention.is_deleted = request.data['is_deleted']
+            convention.is_deleted = True 
     
         convention.save()
 
