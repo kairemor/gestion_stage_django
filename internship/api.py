@@ -49,6 +49,27 @@ class EnterpriseViewSet(viewsets.ModelViewSet):
         if 'is_deleted' in request.data:
             enterprise.is_deleted = request.data['is_deleted']
 
+        if 'name' in request.data:
+            enterprise.name = request.data['name']
+
+        if 'field' in request.data:
+            enterprise.field = request.data['field']
+        
+        if 'email' in request.data:
+            enterprise.email = request.data['email']
+        
+        if 'website' in request.data:
+            enterprise.website = request.data['website']
+        
+        if 'leader_name' in request.data:
+            enterprise.leader_name = request.data['leader_name']
+        
+        if 'latitude' in request.data:
+            enterprise.latitude = request.data['latitude']
+
+        if 'longitude' in request.data:
+            enterprise.longitude = request.data['longitude']
+        
         enterprise.save()
 
         return Response(EnterpriseSerializers(enterprise).data)

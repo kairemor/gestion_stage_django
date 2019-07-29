@@ -41,7 +41,7 @@ class SSerializer(serializers.ModelSerializer):
 class ProjSerializer(serializers.ModelSerializer):
     class Meta:
         model = Project
-        fields = ('id', 'name', 'description', 'aim')
+        fields = ('id', 'name', 'description', 'aim', 'is_deleted')
 
 
 class SkSerializer(serializers.ModelSerializer):

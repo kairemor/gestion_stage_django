@@ -370,7 +370,7 @@ class ProjectViewSet(viewsets.ModelViewSet):
     serializer_class = ProjectSerializer
 
     def get_queryset(self):
-        queryset_project = Project.objects.all().order_by('-id')
+        queryset_project = Project.objects.filter(is_deleled=False).order_by('-id')
         query = self.request.GET.get('framerId')
         if query:
             framer = Framer.objects.get(id=query)
@@ -402,7 +402,14 @@ class ProjectViewSet(viewsets.ModelViewSet):
         notify(title_notification, framer.user.id, userStudentId, task.id)
 
         return Response(ProjectSerializer(pro).data)
-
+    
+    def update(self, request, pk):
+        project = Project.objects.get(id=pk)
+        if 'is_deleted' in request.data:
+            project.is_deleted = True
+        
+        project.save()
+        return Response(ProjectSerializer(project).data)
 
 class AttachmentsViewSet(viewsets.ModelViewSet):
     parser_class = (FileUploadParser,)
@@ -508,7 +515,7 @@ class NotificationViewSet(viewsets.ModelViewSet):
     serializer_class = NotificationSerializer
 
     def get_queryset(self):
-        queryset_msg = Notification.objects.all()
+        queryset_msg = Notification.objects.all().order_by('-id')
         query = self.request.GET.get('userID')
         if query:
             convention = Notification.objects.get(id=query)

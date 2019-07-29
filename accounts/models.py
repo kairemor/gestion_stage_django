@@ -125,6 +125,7 @@ class Project(models.Model):
     starting_time = models.DateTimeField(null=True)
     finish_time = models.DateTimeField(null=True)
     create_at = models.DateTimeField(auto_now_add=True, null=True)
+    is_deleted = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
