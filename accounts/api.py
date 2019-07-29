@@ -370,7 +370,7 @@ class ProjectViewSet(viewsets.ModelViewSet):
     serializer_class = ProjectSerializer
 
     def get_queryset(self):
-        queryset_project = Project.objects.filter(is_deleled=False).order_by('-id')
+        queryset_project = Project.objects.filter(is_deleted=False).order_by('-id')
         query = self.request.GET.get('framerId')
         if query:
             framer = Framer.objects.get(id=query)
